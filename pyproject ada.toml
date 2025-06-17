@@ -1,0 +1,109 @@
+[tool.poetry]
+name = "Ora News Backend"
+version = "0.1.0"
+description = "Ora News Backend"
+authors = ["Ahmad Nur <ahmadnr415@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+SQLAlchemy = "^2.0.36"
+pydantic = "^2.10.3"
+fastapi = { extras = ["standard"], version = "^0.115.6" }
+uvicorn = "^0.32.1"
+aiosqlite = "^0.20.0"
+pydantic-settings = "^2.6.1"
+asyncpg = "^0.29.0"
+alembic = "^1.13.2"
+python-multipart = "^0.0.20"
+fastapi-utils = { extras = ["all"], version = "^0.8.0" }
+aiofiles = "^24.1.0"
+fastapi-mail = "^1.4.2"
+pwdlib = { extras = ["argon2", "bcrypt"], version = "^0.2.1" }
+pyjwt = "^2.10.1"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.8.0"
+pytest = "^8.2.0"
+ruff = "^0.8.2"
+isort = "^5.13.2"
+fire = "^0.7.0"
+faker = "^37.1.0"
+factory-boy = "^3.3.3"
+pytest-asyncio = "^0.26.0"
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+line_length = 85
+
+[tool.ruff]
+line-length = 85
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "__pycache__",
+    "buck-out",
+    "build",
+    "venv",
+    "client",
+    "migrations",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # Error
+    "F",   # Pyflakes
+    "W",   # Pycodestyle
+    "C90", # McCabe complexity
+    "I",   # Isort
+    "N",   # pep8-naming
+    # "D",   # Pydocstyle
+    # "ANN", # Pytype annotations
+    # "S",   # Bandit
+    "B",   # Bugbear
+    "COM", # Commas
+    "C4",  # Comprehensions
+    "ISC", # Implicit string concat
+    "PIE", # Unnecessary code
+    # "T20", # Catch prints
+    "PYI", # validate pyi files
+    "Q",   # Checks for quotes
+    "RSE", # Checks raise statements
+    "RET", # Checks return statements
+    "SLF", # Self checks
+    "SIM", # Simplificator
+    "PTH", # Pathlib checks
+    "ERA", # Checks for commented out code
+    "PL",  # PyLint checks
+    "RUF", # Specific to Ruff checks
+]
+ignore = [
+    "D105",    # Missing docstring in magic method
+    "D107",    # Missing docstring in __init__
+    "B008",    # Do not perform function calls in argument defaults
+    "D211",    # No blank lines allowed before class docstring
+    "D212",    # Multi-line docstring summary should start at the first line
+    "D401",    # First line should be in imperative mood
+    "D104",    # Missing docstring in public package
+    "D100",    # Missing docstring in public module
+    "D202",    # No blank lines allowed after function docstring
+    "ANN102",  # Missing type annotation for self in method
+    "ANN101",  # Missing type annotation for argument
+    "ANN401",  # typing.Any are disallowed in `**kwargs
+    "PLR0913", # Too many arguments for function call
+    "D106",    # Missing docstring in public nested class,
+    "COM812",  # Remove trailing comma for Python code,
+    "PLR2004", # Magic value used in comparison, consider replacing {value} with a constant variable
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"] # Ignore `F401` violations in any `__init__.py` file.
