@@ -14,3 +14,10 @@ class PaginationSchema(BaseSchema, Generic[_T]):
     total_page: int
     next_page: str | None = None
     previous_page: str | None = None
+
+
+class SimplePaginationSchema(BaseSchema, Generic[_T]):
+    """Base schema for pagination."""
+
+    total_count: int
+    data: list[_T]
