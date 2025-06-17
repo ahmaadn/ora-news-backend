@@ -2,8 +2,8 @@ import datetime
 from uuid import UUID, uuid4
 
 from fastapi_utils.guid_type import GUID
-from sqlalchemy import Boolean, DateTime, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import Boolean, DateTime, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 from app.db.models.mixin import TimeStampMixin
@@ -28,3 +28,5 @@ class User(TimeStampMixin, Base):
     password_change_token_expires_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(True), nullable=True
     )
+
+    news = relationship("News", back_populates="user")

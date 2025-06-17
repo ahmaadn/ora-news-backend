@@ -1,13 +1,12 @@
-from fastapi import APIRouter, BackgroundTasks, Body, Depends, HTTPException, Request, status
+from fastapi import APIRouter, BackgroundTasks, Body, Depends, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi_utils.cbv import cbv
 
 from app.api.dependencies.user_manager import UserManager, get_user_manager
-from app.core.config import Settings, get_settings
-from app.schemas.user import UserUpdate, VerifyUserUpdate
+from app.core.config import get_settings
+from app.schemas.user import VerifyUserUpdate
 from app.templates import templates
 from app.utils import exceptions
-from app.utils.common import ErrorCode
 from app.utils.mail import EmailService
 from app.utils.token import TokenManager
 

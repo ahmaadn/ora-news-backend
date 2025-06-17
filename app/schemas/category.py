@@ -1,8 +1,10 @@
+from uuid import UUID
+
 from app.schemas.base import BaseSchema
 
 
 class CategoryRead(BaseSchema):
-    id: str
+    id: UUID
     name: str
 
 
