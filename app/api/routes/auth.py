@@ -59,37 +59,3 @@ class Authentication:
                 e.dump(),
             ) from e
         return UserRead.model_validate(user)
-
-    # async def reset_password(self, token: str, password: str):
-    #     try:
-    #         data = decode_jwt_token(
-    #             token,
-    #             self.reset_password_token_secret,
-    #             [self.reset_password_token_audience],
-    #         )
-    #     except jwt.PyJWTError as e:
-    #         raise exceptions.InvalidResetPasswordTokenError from e
-
-    #     try:
-    #         user_id = data["sub"]
-    #         password_fingerprint = data["password_fgpt"]
-    #     except KeyError as e:
-    #         raise exceptions.InvalidResetPasswordTokenError from e
-
-    #     try:
-    #         parsed_id = self.parse_id(user_id)
-    #     except exceptions.InvalidIDError as e:
-    #         raise exceptions.InvalidVerifyToken from e
-
-    #     user = await self.get(parsed_id)
-
-    #     valid_password_fingerprint, _ = self.password_helper.verify_and_update(
-    #         user.hashed_password, password_fingerprint
-    #     )
-    #     if not valid_password_fingerprint:
-    #         raise exceptions.InvalidResetPasswordTokenError
-
-    #     if not user.is_active:
-    #         raise exceptions.UserInactiveError
-
-    #     return self.user_manager.update(UserUpdate(password=password), user)
