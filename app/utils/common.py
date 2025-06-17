@@ -3,7 +3,7 @@ from enum import StrEnum, auto
 
 class ErrorCode(StrEnum):
     @staticmethod
-    def _generate_next_value_(name, start, count, last_values):
+    def _generate_next_value_(name, start, count, last_values) -> str:
         return name.upper()
 
     APP_ERROR = auto()
@@ -29,3 +29,5 @@ class ErrorCode(StrEnum):
     USER_NOT_HAVE_PERMISSION = auto()
 
     NOT_AUTHENTICATED = auto()
+
+    NEWS_NOT_FOUND = auto()
