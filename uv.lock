@@ -319,6 +319,21 @@ wheels = [
 ]
 
 [[package]]
+name = "fastcrud"
+version = "0.15.12"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "fastapi" },
+    { name = "pydantic" },
+    { name = "sqlalchemy" },
+    { name = "sqlalchemy-utils" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3e/53/f75ee9b3661761dd9dcd27bcf5cd95ba8b0f1df67b43c4953e34deab5a26/fastcrud-0.15.12.tar.gz", hash = "sha256:8fe76abd176e8f506e4cf6193f350a291e1932a3a1c3606c2f8bc26b992c4ca4", size = 41216 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bb/5c/3be53d780d58b99e94cc5c0f4e2a9b8573aac2713e62c9aade02176b9aec/fastcrud-0.15.12-py3-none-any.whl", hash = "sha256:8a828a2f838f437cd7fec8bde639b45b4e63d5482bd725c5e2214a9c9d2493df", size = 55747 },
+]
+
+[[package]]
 name = "fire"
 version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
@@ -541,6 +556,7 @@ dependencies = [
     { name = "fastapi", extra = ["standard"] },
     { name = "fastapi-mail" },
     { name = "fastapi-utils" },
+    { name = "fastcrud" },
     { name = "pwdlib", extra = ["argon2"] },
     { name = "pydantic" },
     { name = "pydantic-settings" },
@@ -568,6 +584,7 @@ requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.115.12" },
     { name = "fastapi-mail", specifier = ">=1.5.0" },
     { name = "fastapi-utils", specifier = ">=0.8.0" },
+    { name = "fastcrud", specifier = ">=0.15.12" },
     { name = "pwdlib", extras = ["argon2"], specifier = ">=0.2.1" },
     { name = "pydantic", specifier = ">=2.11.5" },
     { name = "pydantic-settings", specifier = ">=2.9.1" },
@@ -858,6 +875,18 @@ wheels = [
 [package.optional-dependencies]
 asyncio = [
     { name = "greenlet" },
+]
+
+[[package]]
+name = "sqlalchemy-utils"
+version = "0.41.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "sqlalchemy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/4d/bf/abfd5474cdd89ddd36dbbde9c6efba16bfa7f5448913eba946fed14729da/SQLAlchemy-Utils-0.41.2.tar.gz", hash = "sha256:bc599c8c3b3319e53ce6c5c3c471120bd325d0071fb6f38a10e924e3d07b9990", size = 138017 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d5/f0/dc4757b83ac1ab853cf222df8535ed73973e0c203d983982ba7b8bc60508/SQLAlchemy_Utils-0.41.2-py3-none-any.whl", hash = "sha256:85cf3842da2bf060760f955f8467b87983fb2e30f1764fd0e24a48307dc8ec6e", size = 93083 },
 ]
 
 [[package]]
