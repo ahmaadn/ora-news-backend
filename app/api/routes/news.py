@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 from fastapi_utils.cbv import cbv
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -26,13 +26,18 @@ class _News:
     )
     async def get_news(
         self,
-        search: str | None = None,
-        page: int = 1,
-        per_page: int = 20,
+        page: int = Query(default=1, ge=1),
+        per_page: int = Query(default=20, ge=1, le=100),
         author: str | None = None,
         category: UUID | None = None,
+        search: str | None = None,
+        latest: bool = True,
     ):
-        query = select(News).options(selectinload(News.category), selectinload(News.user))
+        query = (
+            select(News)
+            .options(selectinload(News.category), selectinload(News.user))
+            .order_by(News.published_at.desc() if latest else News.published_at.asc())
+        )
 
         if search:
             query = query.where(News.title.ilike(f"%{search}%"))
@@ -41,6 +46,6 @@ class _News:
             query = query.where(News.category_id == category)
 
         if author:
-            query = query.where(News.user.username == author)
+            query = query.join(News.user).where(News.user.has(username=author.lower()))
 
         return await paginate(self.db, query, page, per_page)

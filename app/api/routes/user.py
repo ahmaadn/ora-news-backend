@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
 from fastapi_utils.cbv import cbv
 from fastcrud import FastCRUD
 from sqlalchemy import select
@@ -63,22 +63,24 @@ class _MeNews:
     )
     async def get_all_user_news(
         self,
-        page: int = 1,
-        per_page: int = 20,
-        categoy_id: UUID | None = None,
+        page: int = Query(default=1, ge=1),
+        per_page: int = Query(default=20, ge=1, le=100),
+        category: UUID | None = None,
         search: str | None = None,
+        latest: bool = True,
     ):
         query = (
             select(News)
             .options(selectinload(News.category), selectinload(News.user))
             .where(News.user_id == self.current_user.id)
+            .order_by(News.published_at.desc() if latest else News.published_at.asc())
         )
 
-        if categoy_id:
-            query = query.where(News.category_id == categoy_id)
-
         if search:
-            query = query.where(News.title.like(f"%{search}%"))
+            query = query.where(News.title.ilike(f"%{search}%"))
+
+        if category:
+            query = query.where(News.category_id == category)
 
         return await paginate(self.db, query, page, per_page)
 
