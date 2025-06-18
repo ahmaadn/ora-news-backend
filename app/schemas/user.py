@@ -51,3 +51,8 @@ class UserPasswordUpdate(UserUpdate):
     pending_password_hash: str | None = None
     password_change_token: str | None = None
     password_change_token_expires_at: datetime | None = None
+
+
+class UserPublicRead(_BaseUserSchema):
+    username: str
+    name: str

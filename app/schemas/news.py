@@ -5,6 +5,8 @@ from pydantic import Field
 
 from app.schemas.base import BaseSchema
 from app.schemas.category import CategoryRead
+from app.schemas.mixin import TimeStampMixinSchema
+from app.schemas.user import UserPublicRead
 
 
 class UserNewsRead(BaseSchema):
@@ -35,3 +37,13 @@ class UserNewsCreate(BaseSchema):
     user_id: UUID
     published_at: datetime.datetime = Field(default_factory=datetime.datetime.now)
     image_url: str | None = None
+
+
+class NewsPublicRead(TimeStampMixinSchema, BaseSchema):
+    id: UUID
+    title: str
+    content: str
+    image_url: str | None = None
+    published_at: datetime.datetime
+    category: CategoryRead
+    user: UserPublicRead
