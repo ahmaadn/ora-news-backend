@@ -2,6 +2,7 @@ import re
 
 from email_validator import EmailNotValidError
 from email_validator import validate_email as validate_email_
+from fastapi import HTTPException, UploadFile, status
 
 from app.core.config import get_settings
 from app.utils import exceptions
@@ -52,3 +53,15 @@ def validate_password(password: str, user):
             error_code=ErrorCode.INVALID_PASSOWRD,
         )
     return password
+
+
+def validate_file_image(file: UploadFile):
+    allowed_extensions = {"image/jpeg", "image/png"}
+    if file.content_type not in allowed_extensions:
+        raise HTTPException(
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            detail=exceptions.FormatFileNotAllowedError(
+                "Invalid file type. Only JPG and PNG are allowed.",
+                error_code=ErrorCode.FORMAT_IMAGE_NOT_ALLOWED,
+            ).dump(),
+        )

@@ -24,7 +24,7 @@ from app.utils import exceptions
 from app.utils.cloudinary import upload_image_to_cloudinary
 from app.utils.common import ErrorCode
 from app.utils.pagination import paginate
-from app.utils.upload_images import validate_file_image
+from app.utils.validator import validate_file_image
 
 r = router = APIRouter(tags=["user"])
 
