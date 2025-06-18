@@ -31,3 +31,4 @@ class ErrorCode(StrEnum):
     NOT_AUTHENTICATED = auto()
 
     NEWS_NOT_FOUND = auto()
+    FORMAT_IMAGE_NOT_ALLOWED = auto()

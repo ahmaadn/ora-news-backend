@@ -1,7 +1,6 @@
-from tkinter import NW
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from fastapi_utils.cbv import cbv
 from fastcrud import FastCRUD
 from sqlalchemy import select
@@ -11,7 +10,6 @@ from sqlalchemy.orm import selectinload
 from app.api.dependencies.authentication import get_current_active_user
 from app.api.dependencies.sessions import get_async_session
 from app.api.dependencies.user_manager import UserManager, get_user_manager
-from app.db.models.category import Category
 from app.db.models.news import News
 from app.db.models.user import User
 from app.schemas.news import (
@@ -23,8 +21,10 @@ from app.schemas.news import (
 from app.schemas.pagination import PaginationSchema
 from app.schemas.user import UserRead, UserUpdate
 from app.utils import exceptions
+from app.utils.cloudinary import upload_image_to_cloudinary
 from app.utils.common import ErrorCode
 from app.utils.pagination import paginate
+from app.utils.upload_images import validate_file_image
 
 r = router = APIRouter(tags=["user"])
 
@@ -149,3 +149,36 @@ class _MeNews:
 
         await self.db.delete(news)
         await self.db.commit()
+
+    @r.post("/me/news/{news_id}/upload-image", status_code=status.HTTP_202_ACCEPTED)
+    async def upload_image(self, news_id: UUID, file: UploadFile = File(...)):
+        news = await news_crud.get(self.db, one_or_none=True, id=news_id)
+        if news is None:
+            raise HTTPException(
+                status.HTTP_404_NOT_FOUND,
+                exceptions.NewsNotFoundError(
+                    "News not found", error_code=ErrorCode.NEWS_NOT_FOUND
+                ).dump(),
+            )
+
+        if news["user_id"] != self.current_user.id:
+            raise HTTPException(
+                status.HTTP_406_NOT_ACCEPTABLE,
+                exceptions.UserNotHavePermission(
+                    "User not have permission", error_code=ErrorCode.USER_NOT_HAVE_PERMISSION
+                ).dump(),
+            )
+        # Validate image
+        validate_file_image(file)
+
+        try:
+            result = await upload_image_to_cloudinary(file.file, news_id)
+            await news_crud.update(
+                self.db,
+                {"image_url": result["secure_url"]},
+                id=news_id,
+            )
+        except Exception as e:
+            return HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(e.args))
+        finally:
+            file.file.close()

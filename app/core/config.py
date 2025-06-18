@@ -41,6 +41,10 @@ class Settings(BaseSettings):
     MAIL_PASSWORD: str | None = None
     MAIL_SSL_TLS: bool = True
 
+    CLOUDINARY_CLOUD_NAME: str | None = None
+    CLOUDINARY_API_KEY: str | None = None
+    CLOUDINARY_API_SECRET: str | None = None
+
     @computed_field
     @property
     def db_url(self) -> PostgresDsn:
