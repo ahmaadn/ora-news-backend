@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi_utils.cbv import cbv
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,6 +10,8 @@ from app.api.dependencies.sessions import get_async_session
 from app.db.models.news import News
 from app.schemas.news import NewsPublicRead
 from app.schemas.pagination import PaginationSchema
+from app.utils import exceptions
+from app.utils.common import ErrorCode
 from app.utils.pagination import paginate
 
 r = router = APIRouter(tags=["news"])
@@ -49,3 +51,24 @@ class _News:
             query = query.join(News.user).where(News.user.has(username=author.lower()))
 
         return await paginate(self.db, query, page, per_page)
+
+    @r.get(
+        "/news{news_id}",
+        status_code=status.HTTP_200_OK,
+        response_model=NewsPublicRead,
+    )
+    async def get_news_by_id(self, news_id: UUID):
+        query = (
+            select(News)
+            .options(selectinload(News.category), selectinload(News.user))
+            .where(News.id == news_id)
+        )
+        news = (await self.db.execute(query)).scalar_one_or_none()
+        if not news:
+            raise HTTPException(
+                status.HTTP_404_NOT_FOUND,
+                exceptions.NewsNotFoundError(
+                    "News not found", error_code=ErrorCode.NEWS_NOT_FOUND
+                ).dump(),
+            )
+        return news
