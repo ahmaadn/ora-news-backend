@@ -22,12 +22,14 @@ class UserNewsRequestCreate(BaseSchema):
     title: str
     content: str
     category_id: UUID
+    image_url: str | None = None
 
 
 class UserNewsUpdate(BaseSchema):
     title: str | None = None
     content: str | None = None
     category_id: UUID | None = None
+    image_url: str | None = None
 
 
 class UserNewsCreate(BaseSchema):
