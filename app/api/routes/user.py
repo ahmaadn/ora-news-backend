@@ -1,3 +1,4 @@
+import datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
@@ -86,7 +87,11 @@ class _MeNews:
 
     @r.post("/me/news", status_code=status.HTTP_200_OK, response_model=UserNewsRead)
     async def create_news(self, data: UserNewsRequestCreate):
-        news = UserNewsCreate(user_id=self.current_user.id, **data.model_dump())
+        news = UserNewsCreate(
+            user_id=self.current_user.id,
+            published_at=datetime.datetime.now(datetime.timezone.utc),
+            **data.model_dump(),
+        )
 
         news = await news_crud.create(self.db, news)
 
